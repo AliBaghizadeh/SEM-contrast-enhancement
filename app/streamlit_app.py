@@ -46,7 +46,7 @@ st.markdown(
     """
     <style>
     .stApp {
-        background-color: #e6f2ff;  /* light blue */
+        background-color: #f7fbfe;
     }
     </style>
     """,
@@ -67,20 +67,13 @@ st.markdown(
 st.markdown(
     """
     <div style="text-align:center;">
-    <strong>**Preset cheat-sheet**</strong><br>
-
-
-    - **Lines (ferroelastic / needle-like features):** multi-scale Frangi + DoG to
-    emphasize elongated ridges, aggressive dirt removal, bright-line fusion. Useful
-    when you care about *domain walls* or long conductive paths.
-    - **Boundaries (grain-only micrographs):** lighter Frangi weights, stronger CLAHE +
-    smoothing to highlight polygonal grain edges. Ideal when the image mostly
-    contains *grain interiors and boundaries* with little line texture.
-
-    Select the preset that best matches your sample, then compare the `Lines`,
-    `Base`, and `Fused` views to understand what will be fed downstream (e.g., SAM/MatSAM).
-   </div>
-   """
+        <strong>Preset cheat-sheet</strong><br/>
+        <em>Lines (ferroelastic / needle-like features):</em> multi-scale Frangi + DoG to emphasize elongated ridges, aggressive dirt removal, bright-line fusion. Useful when you care about domain walls or long conductive paths.<br/>
+        <em>Boundaries (grain-only micrographs):</em> lighter Frangi weights, stronger CLAHE + smoothing to highlight polygonal grain edges. Ideal when the image mostly contains grain interiors and boundaries with little line texture.<br/>
+        Select the preset that best matches your sample, then compare the <code>Lines</code>, <code>Base</code>, and <code>Fused</code> views to understand what will be fed downstream (e.g., SAM/MatSAM).
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 
