@@ -87,15 +87,19 @@ def load_sem_from_path(path: Path) -> np.ndarray:
 
 col1, col2 = st.columns([2, 3])
 with col1:
-    preset = st.selectbox("Select preset", list(PIPELINE_PRESETS.keys()), index=list(PIPELINE_PRESETS.keys()).index(DEFAULT_PRESET))
+    preset = st.selectbox(
+        "Select preset",
+        list(PIPELINE_PRESETS.keys()),
+        index=list(PIPELINE_PRESETS.keys()).index(DEFAULT_PRESET),
+    )
 with col2:
-all_sample_choices = ["Upload your own"]
-if SAMPLE_FILES:
-    all_sample_choices += list(SAMPLE_FILES.keys())
-if SYNTHETIC_SAMPLES:
-    all_sample_choices += list(SYNTHETIC_SAMPLES.keys())
+    all_sample_choices = ["Upload your own"]
+    if SAMPLE_FILES:
+        all_sample_choices += list(SAMPLE_FILES.keys())
+    if SYNTHETIC_SAMPLES:
+        all_sample_choices += list(SYNTHETIC_SAMPLES.keys())
 
-sample_choice = st.selectbox("Use sample or upload", all_sample_choices)
+    sample_choice = st.selectbox("Use sample or upload", all_sample_choices)
 
 uploaded = None
 image = None
