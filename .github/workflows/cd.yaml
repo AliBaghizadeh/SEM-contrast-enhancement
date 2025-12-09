@@ -15,9 +15,9 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          python -m huggingface_hub upload \
+          huggingface-cli upload \
+            alibaghizade/SEM-contrast-enhancement \
+            . \
             --repo-type space \
-            --repo alibaghizade/SEM-contrast-enhancement \
-            --local-dir . \
             --token "$HF_TOKEN" \
             --commit-message "Auto deploy from GitHub"
