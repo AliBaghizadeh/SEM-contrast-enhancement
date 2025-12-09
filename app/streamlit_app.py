@@ -10,9 +10,33 @@ from sem_line_enhancer.pipeline import SEMPreprocessor
 from sem_line_enhancer.presets import PIPELINE_PRESETS, PREPROCESSOR_PRESETS, DEFAULT_PRESET
 
 BASE_DIR = Path(__file__).parent.parent
-SAMPLES = {
-    "Sample: grains and lines": BASE_DIR / "examples" / "grains and lines.png",
-    "Sample: grain boundaries": BASE_DIR / "examples" / "grain boundaries.png",
+EXAMPLES_DIR = BASE_DIR / "examples"
+
+
+def synthetic_grains_and_lines(shape: int = 512) -> np.ndarray:
+    x = np.linspace(0, np.pi * 4, shape)
+    y = np.linspace(0, np.pi * 4, shape)
+    xx, yy = np.meshgrid(x, y)
+    lines = 0.5 + 0.5 * np.sin(xx * 2 + yy)
+    grains = np.clip(cv2.GaussianBlur(lines, (0, 0), 3) + 0.1 * np.random.randn(shape, shape), 0, 1)
+    return grains.astype(np.float32)
+
+
+def synthetic_grain_boundaries(shape: int = 512) -> np.ndarray:
+    grid = np.indices((shape, shape)).sum(axis=0) % 40
+    boundaries = np.where(grid < 2, 0.2, 0.8).astype(np.float32)
+    boundaries = cv2.GaussianBlur(boundaries, (0, 0), 1)
+    return boundaries
+
+
+SAMPLE_FILES = {}
+if EXAMPLES_DIR.exists():
+    for path in sorted(EXAMPLES_DIR.glob("*.png")):
+        SAMPLE_FILES[f"Sample: {path.stem}"] = path
+
+SYNTHETIC_SAMPLES = {
+    "Sample: synthetic grains + lines": synthetic_grains_and_lines,
+    "Sample: synthetic grain boundaries": synthetic_grain_boundaries,
 }
 
 st.set_page_config(page_title="SEM Line Enhancer", layout="wide")
@@ -65,23 +89,31 @@ col1, col2 = st.columns([2, 3])
 with col1:
     preset = st.selectbox("Select preset", list(PIPELINE_PRESETS.keys()), index=list(PIPELINE_PRESETS.keys()).index(DEFAULT_PRESET))
 with col2:
-    sample_choice = st.selectbox(
-        "Use sample or upload",
-        ["Upload your own"] + list(SAMPLES.keys()),
-    )
+all_sample_choices = ["Upload your own"]
+if SAMPLE_FILES:
+    all_sample_choices += list(SAMPLE_FILES.keys())
+if SYNTHETIC_SAMPLES:
+    all_sample_choices += list(SYNTHETIC_SAMPLES.keys())
+
+sample_choice = st.selectbox("Use sample or upload", all_sample_choices)
 
 uploaded = None
 image = None
 filename = "uploaded_image"
 
 if sample_choice != "Upload your own":
-    sample_path = SAMPLES[sample_choice]
-    try:
-        image = load_sem_from_path(sample_path)
-    except Exception as exc:
-        st.error(f"Failed to load sample: {exc}")
-        st.stop()
-    filename = sample_path.stem
+    if sample_choice in SAMPLE_FILES:
+        sample_path = SAMPLE_FILES[sample_choice]
+        try:
+            image = load_sem_from_path(sample_path)
+        except Exception as exc:
+            st.error(f"Failed to load sample: {exc}")
+            st.stop()
+        filename = sample_path.stem
+    else:
+        generator = SYNTHETIC_SAMPLES[sample_choice]
+        image = generator()
+        filename = sample_choice.replace("Sample: ", "").replace(" ", "_")
 else:
     uploaded = st.file_uploader(
         "Upload a SEM image (TIFF, PNG, JPG)", type=["tif", "tiff", "png", "jpg", "jpeg"]

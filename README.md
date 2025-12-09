@@ -46,8 +46,9 @@ python -m sem_line_enhancer.cli export \
 streamlit run app/streamlit_app.py
 ```
 
-The app lets users pick a preset, load one of the bundled examples (lines vs.
-boundaries), or upload their own image. Results can be downloaded as `.npy`
+The app lets users pick a preset, load one of the sample images (either the
+bundled PNGs under `examples/` or the synthetic fallbacks shipped inside the app
+for Spaces), or upload their own image. Results can be downloaded as `.npy`
 arrays for downstream SAM/MatSAM workflows, which have not been described here.
 
 ---
