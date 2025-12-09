@@ -16,7 +16,7 @@ reproducible package plus a Streamlit demo. The goal is to showcase some algorit
 | `app/streamlit_app.py` | Upload/sample interface showing Original + Lines/Base/Fused panels and downloads. |
 
 Two presets are shipped:
-- **`lines`** – tuned for ferroelastic line visibility (Frangi+DoG-heavy, stronger dirt removal).
+- **`lines`** – tuned for something like ferroelastic line or other line-shape features visibility (Frangi+DoG-heavy, stronger dirt removal).
 - **`boundaries`** – tuned for grain-only micrographs (lighter Frangi weights, CLAHE emphasis).
 
 Sample PNGs (`examples/`) match both classes so the app/CI can run without raw data.
