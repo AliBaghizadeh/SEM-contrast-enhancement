@@ -1,10 +1,7 @@
 # SEM Contrast Enhancement Settings
 
 This repository condenses an SEM-preprocessing workflow into a single,
-reproducible package plus a Streamlit demo. The goal is to demonstrate practical
-MLOps skills—versioned presets, experiment tracking hooks, CI smoke tests, and a
-deployable app—while showcasing the microscopy techniques referenced in the
-accompanying manuscript (Frangi, dirt inpainting, CLAHE/bilateral, DoG fusion).
+reproducible package plus a Streamlit demo. The goal is to showcase some algorithms, like Frangi, dirt inpainting, CLAHE/bilateral, DoG fusion, to preprocess SEM images of the microstructures as an initial step to feed a large amount of SEM images into a machine learning pipeline.
 
 ---
 ## 1. Architecture Overview
