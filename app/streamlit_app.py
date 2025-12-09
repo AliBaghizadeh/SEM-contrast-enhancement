@@ -39,25 +39,48 @@ SYNTHETIC_SAMPLES = {
     "Sample: synthetic grain boundaries": synthetic_grain_boundaries,
 }
 
+# Config the UI
 st.set_page_config(page_title="SEM Line Enhancer", layout="wide")
-st.title("SEM Line & Grain Enhancement")
-st.caption(
-    "Upload a SEM micrograph or pick a sample to preview the preprocessing presets."
-)
+
 st.markdown(
     """
-**Preset cheat-sheet**
+    <style>
+    .stApp {
+        background-color: #e6f2ff;  /* light blue */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
-- **Lines (ferroelastic / needle-like features):** multi-scale Frangi + DoG to
-  emphasize elongated ridges, aggressive dirt removal, bright-line fusion. Useful
-  when you care about *domain walls* or long conductive paths.
-- **Boundaries (grain-only micrographs):** lighter Frangi weights, stronger CLAHE +
-  smoothing to highlight polygonal grain edges. Ideal when the image mostly
-  contains *grain interiors and boundaries* with little line texture.
 
-Select the preset that best matches your sample, then compare the `Lines`,
-`Base`, and `Fused` views to understand what will be fed downstream (e.g., SAM/MatSAM).
-"""
+st.markdown(
+    """
+    <h1 style="text-align:center;">SEM Image Contrast Enhancement</h1>
+    <p style="text-align:center;">
+        Upload a SEM micrograph or pick a sample to preview the preprocessing presets.
+    </p>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    """
+    <div style="text-align:center;">
+    <strong>**Preset cheat-sheet**</strong><br>
+
+
+    - **Lines (ferroelastic / needle-like features):** multi-scale Frangi + DoG to
+    emphasize elongated ridges, aggressive dirt removal, bright-line fusion. Useful
+    when you care about *domain walls* or long conductive paths.
+    - **Boundaries (grain-only micrographs):** lighter Frangi weights, stronger CLAHE +
+    smoothing to highlight polygonal grain edges. Ideal when the image mostly
+    contains *grain interiors and boundaries* with little line texture.
+
+    Select the preset that best matches your sample, then compare the `Lines`,
+    `Base`, and `Fused` views to understand what will be fed downstream (e.g., SAM/MatSAM).
+   </div>
+   """
 )
 
 
@@ -102,19 +125,28 @@ def load_sem_from_path(path: Path) -> np.ndarray:
 
 col1, col2 = st.columns([2, 3])
 with col1:
+    st.markdown(
+        "<h4 style='text-align:left;'>Select preset</h4>",
+        unsafe_allow_html=True,
+    )
     preset = st.selectbox(
-        "Select preset",
+        "",
         list(PIPELINE_PRESETS.keys()),
         index=list(PIPELINE_PRESETS.keys()).index(DEFAULT_PRESET),
     )
+
 with col2:
+    st.markdown(
+        "<h4 style='text-align:left;'>Use sample or upload</h4>",
+        unsafe_allow_html=True,
+    )
     all_sample_choices = ["Upload your own"]
     if SAMPLE_FILES:
         all_sample_choices += list(SAMPLE_FILES.keys())
     if SYNTHETIC_SAMPLES:
         all_sample_choices += list(SYNTHETIC_SAMPLES.keys())
 
-    sample_choice = st.selectbox("Use sample or upload", all_sample_choices)
+    sample_choice = st.selectbox("", all_sample_choices)
 
 uploaded = None
 image = None
